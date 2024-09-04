@@ -1,10 +1,16 @@
+// All required import
 import express from "express";
-const app: express.Application = express();
+import dotenv from "dotenv";
+dotenv.config();
+import { app } from "./config";
+import categoryRoute from "./routes/categories";
+import subCategoryRoute from "./routes/subcategories";
 
-app.get("/api/test", (req: express.Request, res: express.Response) => {
-  res.status(200).send("Welcome from express with typescript");
-});
+// Middleware
+app.use(express.json());
 
-app.listen(5000, () => {
-  console.log("connected to server");
-});
+// Upload file
+
+// Routes
+app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/subcategories", subCategoryRoute);
