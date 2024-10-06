@@ -1,0 +1,27 @@
+<section class="py-16" id="sponsors">
+  <div class="container-wrapper">
+    <!-- Start carousel -->
+    <p-carousel
+      [value]="products"
+      [numVisible]="6"
+      [numScroll]="1"
+      [circular]="true"
+      [autoplayInterval]="3000"
+      [showIndicators]="true"
+    >
+      <ng-template let-product pTemplate="item" >
+        <div class="product-item">
+          <div class="h-[25vh]">
+            <img
+              [src]="product.image"
+              alt="Image of {{ product.name }}"
+              class="img-responsive-fill rounded-full"
+            />
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+
+    <!-- End carousel -->
+  </div>
+</section>

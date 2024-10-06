@@ -1,0 +1,255 @@
+<!-- Start section two -->
+<section class="pb-[40px]">
+  <div class="container-wrapper">
+    <div class="contentst bg-white p-8">
+      <div class="tabs border-b">
+        <button (click)="filterTabs('description')" class="hover:border p-2.5">
+          Description</button
+        ><button (click)="filterTabs('information')" class="hover:border p-2.5">
+          Information</button
+        ><button (click)="filterTabs('reviews')" class="hover:border p-2.5">
+          Reviews({{ length }})
+        </button>
+      </div>
+      <div class="">
+        <!--  -->
+        @if(flag === "desc"){
+        <div class="pl-2 pt-4">
+          <h2 class="font-medium text-slate-800 text-2xl pb-4">
+            Product Description
+          </h2>
+          <p class="text-gray-600 text-justify">
+            {{ product.desc }}
+          </p>
+        </div>
+        }
+        <!--  -->
+        @if(flag === "info"){
+        <div class="pl-2 pt-4 pb-8">
+          <h2 class="font-medium text-slate-800 text-2xl pb-4">
+            Additional Information
+          </h2>
+          <p class="text-gray-600 text-justify">
+            {{ product.desc }}
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-8">
+          <div class="w-[48%] p-2 border-b">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus,
+            fugiat.
+          </div>
+          <div class="w-[48%] p-2 border-b">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus,
+            fugiat.
+          </div>
+          <div class="w-[48%] p-2 border-b">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus,
+            fugiat.
+          </div>
+          <div class="w-[48%] p-2 border-b">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus,
+            fugiat.
+          </div>
+        </div>
+        }
+        <!--  -->
+        @if(flag === "rev"){
+        <div class="pl-2 flex gap-8">
+          <div class="w-[50%]">
+            <h2 class="font-medium text-2xl text-slate-700 py-6">
+              {{ length }} review for "{{ productName }}"
+            </h2>
+            <div
+              class="reviews flex flex-col gap-6 max-h-[278px] overflow-y-auto p-4"
+            >
+              @if(reviews.length > 0){ @for(review of reviews; track
+              review._id){
+              <div class="review border-b pb-4">
+                <div class="asides flex gap-4">
+                  <div class="w-[52px] h-[52px]">
+                    <img
+                      [src]="userImg + review.userId.profileImg"
+                      alt=""
+                      class="img-responsive rounded-full"
+                    />
+                  </div>
+                  <div class="flex flex-col gap-3">
+                    <h3 class="">
+                      <span class="font-medium text-sm">{{
+                        review.userId.name
+                      }}</span>
+                      -
+                      <span class="italic text-xs text-slate-400">
+                        {{ review.createdAt | date }}</span
+                      >
+                    </h3>
+                    <div class="flex gap-1">
+                      @for(star of getStarsArray(review.rate); track star){
+                      <i class="far fa-star text-yellow-400"></i>
+                      } ({{ review.rate }})
+                    </div>
+                    <p class="text-gray-500 text-justify">
+                      {{ review.comment }}
+                    </p>
+                  </div>
+                  @if(review.userId._id === userId){
+                  <div class="flex flex-col gap-1 ml-auto">
+                    <button
+                      (click)="toggleUpdateAddress(review._id)"
+                      class="bg-yellow-400 rounded text-sm px-3 py-1 text-white"
+                    >
+                      update</button
+                    ><button
+                      (click)="deleteOneReviewByUser(review._id)"
+                      class="bg-black rounded text-sm px-3 py-1 text-white"
+                    >
+                      delete
+                    </button>
+                  </div>
+                  }
+                </div>
+              </div>
+              } }@else{
+              <p class="text-slate-700 font-medium">
+                No Available Reviewes For That product
+              </p>
+              }
+            </div>
+            @if(reviewToastMessage){
+            <p class="text-red-600 font-medium">
+              {{ reviewToastMessage }}
+            </p>
+            }
+          </div>
+          <div class="w-[50%] flex flex-col gap-4">
+            <h2 class="font-medium text-2xl text-slate-700 pt-7">
+              Leave a review
+            </h2>
+            <p class="text-sm text-slate-400">
+              Your email address will not be published. Required fields are
+              marked *
+            </p>
+
+            <form
+              [formGroup]="reviewForm"
+              (ngSubmit)="createOneReviewByUser(id, reviewForm)"
+            >
+              <!--  -->
+              <div class="flex gap-2 items-center">
+                <span class="text-[16px] text-slate-500">Your Rating * : </span>
+                <div class="flex gap-1">
+                  <i class="far fa-star text-yellow-400"></i
+                  ><i class="far fa-star text-yellow-400"></i
+                  ><i class="far fa-star text-yellow-400"></i>
+                  <i class="far fa-star text-yellow-400"></i>
+                  <i class="far fa-star text-yellow-400"></i>
+                </div>
+                <div class="w-[50px]">
+                  <input
+                    formControlName="rate"
+                    type="number"
+                    min="1"
+                    max="5"
+                    class="border w-full"
+                  />
+                </div>
+              </div>
+              <div class="">
+                <label for="review" class="text-[16px] text-slate-500 pb-3 flex"
+                  >Your Review *</label
+                >
+                <textarea
+                  formControlName="comment"
+                  name=""
+                  id="review"
+                  class="w-full border"
+                  rows="6"
+                ></textarea>
+              </div>
+              @if(invalidReviewForm){
+              <p class="text-red-600 font-medium py-2">
+                {{ invalidReviewForm }}
+              </p>
+              }
+              <button
+                class="bg-yellow-400 p-2 px-3 font-medium text-sm w-fit text-slate-900"
+              >
+                Leave Your Reply
+              </button>
+              <!--  -->
+            </form>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="py-6 flex gap-1">
+      <span class="bg-black text-white font-medium text-xs px-3 py-1"
+        >Tags</span
+      >
+
+      @if(product.tags.length > 0){ @for(tagName of product.tags; track $index){
+      <a
+        [routerLink]="'/tags/' + tagName"
+        class="bg-white rounded text-xs px-3 py-1"
+        >{{ tagName }}</a
+      >
+      } }@else{
+      <p>No Tags available for that product.</p>
+      }
+    </div>
+  </div>
+</section>
+<!-- End section two -->
+<!-- Modal review update -->
+<div
+  [class]="
+    (openUpdateAddress ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div class="parmodal_modal bg-white w-[350px] h-[430px] pr-4 pl-10 pt-2 pb-8">
+    <div class="flex justify-end">
+      <button
+        (click)="openUpdateAddress = false"
+        class="p-1 text-white bg-red-500 text-xs"
+      >
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">
+      Upade Your Product Review
+    </h2>
+    <form
+      [formGroup]="reviewForm"
+      (ngSubmit)="updateOneReviewByUser(reviewId!, reviewForm)"
+      class="flex flex-col gap-4 pr-6"
+    >
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Rate </label>
+        <input
+          formControlName="rate"
+          type="number"
+          class="text-sm w-full border-0 border-b"
+          min="0"
+          max="5"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Comment </label>
+        <input
+          formControlName="comment"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+
+      <button class="p-1 bg-yellow-500 text-white text-sm">Update</button>
+      @if(reviewUpadtedToastMessage){
+      <p class="text-red-600 font-medium">{{ reviewUpadtedToastMessage }}</p>
+      }
+    </form>
+  </div>
+</div>

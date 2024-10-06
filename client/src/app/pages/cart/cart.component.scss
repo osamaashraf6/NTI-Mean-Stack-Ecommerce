@@ -1,0 +1,10 @@
+.item-cart::-webkit-scrollbar {
+  width: 4px;
+}
+.item-cart::-webkit-scrollbar-track {
+  background-color: #c3c2c2;
+}
+.item-cart::-webkit-scrollbar-thumb {
+  background-color: rgb(228, 201, 25);
+  border-radius: 5px;
+}

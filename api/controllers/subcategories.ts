@@ -1,49 +1,64 @@
-import asyncHandler from "express-async-handler";
-// // All required import
+// All required import
 import express from "express";
+// import asyncHandler from "express-async-handler";
 import { ISubCategory } from "../interfaces/SubCategory";
 import SubCategory from "../models/SubCategory";
+import {
+  createOneHandler,
+  deleteOneHandler,
+  getAllHandler,
+  getOneHandler,
+  updateOneHandler,
+} from "./refactorcrud";
+import { IFilterData } from "../interfaces/FilterData";
 
-// createOneHandler
-export const createOneHandler = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
-    const subCategory: ISubCategory = await SubCategory.create(req.body);
-    res.status(200).json(subCategory);
-  }
-);
-// getAllHandler
+// createOneSubCategory
+export const createOneSubCategory = createOneHandler<ISubCategory>(SubCategory);
+// getAllSubCategory
 
-export const getAllHandler = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
-    const subCategories: ISubCategory[] = await SubCategory.find();
-    res.status(200).json(subCategories);
-  }
+export const getAllSubCategory = getAllHandler<ISubCategory>(
+  SubCategory,
+  "SUbCategoryModel"
 );
-// getOneHandler
 
-export const getOneHandler = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
-    const subCategory = await SubCategory.findById(req.params.id);
-    res.status(200).json(subCategory);
-  }
-);
-// updateOneHandler
+// getOneSubCategory
 
-export const updateOneHandler = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
-    const subCategory = await SubCategory.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      { new: true }
-    );
-    res.status(200).json(subCategory);
-  }
-);
-// deleteOneHandler
+export const getOneSubCategory = getOneHandler<ISubCategory>(SubCategory);
 
-export const deleteOneHandler = asyncHandler(
-  async (req: express.Request, res: express.Response) => {
-    await SubCategory.findByIdAndDelete(req.params.id);
-    res.status(200).json("subCategory has been deleted successfully");
+// updateOneSubCategory
+
+export const updateOneSubCategory = updateOneHandler<ISubCategory>(SubCategory);
+
+// deleteOneSubCategory
+
+export const deleteOneSubCategory = deleteOneHandler(SubCategory);
+
+// filterSubCategory by filterData
+export const filterSubCategory = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  let filterData: IFilterData = {};
+  if (req.params.categoryId) {
+    filterData.categoryId = req.params.categoryId;
   }
-);
+  req.filterData = filterData;
+  next();
+};
+
+// export const getAllSubCategoryOfCategoryId = asyncHandler(
+//   async (
+//     req: express.Request,
+//     res: express.Response,
+//     next: express.NextFunction
+//   ) => {
+//     const document: ISubCategory[] = await SubCategory.find({
+//       categoryId: req.params.categoryId,
+//     }).populate({ path: "categoryId", select: "name" });
+//     if (!document) {
+//       return next(new ApiError(404, "Document Not Found!"));
+//     }
+//     res.status(200).json(document);
+//   }
+// );

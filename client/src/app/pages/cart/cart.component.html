@@ -1,0 +1,278 @@
+<section class="py-6">
+  <div class="container-wrapper">
+    <div class="uppercase text-center font-medium text-2xl mb-5">your bag</div>
+    <div class="flex justify-between items-center mb-7">
+      <div class="flex flex-col gap-3">
+        <a
+          routerLink="/"
+          class="border bg-transparent text-xs p-2 font-medium uppercase shadow"
+        >
+          continue shopping
+        </a>
+        <button
+          (click)="clearUserCart()"
+          class="text-white text-xs bg-red-500 p-2 font-medium uppercase shadow"
+        >
+          Clear Cart
+        </button>
+      </div>
+      <div class="flex gap-5">
+        <a routerLink="" class="underline"> Shopping Bag ({{ length }}) </a>
+        <a routerLink="/wishlist" class="underline"> Your Wishlist </a>
+      </div>
+      <button
+        (click)="toggleModal()"
+        class="border bg-black p-2 text-white font-medium uppercase shadow"
+      >
+        checkout now
+      </button>
+    </div>
+    <!--  -->
+    <div class="items flex">
+      <div class="item-cart w-[80%] max-h-[600px] overflow-y-auto">
+        @if(cart){ @for(product of cart.items; track product._id){
+        <div
+          class="grid grid-cols-4 p mb-5 py-6 gap-7 border-b bg-white shadow-md"
+        >
+          <div class="h-[150px] row-span-2">
+            <div class="h-full">
+              <img
+                [src]="productImg + product.productId.coverimg"
+                class="img-responsive-fill"
+                alt
+              />
+            </div>
+          </div>
+          <div class="h-[150px] col-span-2 row-span-2">
+            <ul class="flex flex-col gap-4">
+              <li>
+                <span class="font-bold">Product: </span>
+                <span class="">{{ product?.productId?.name }}</span>
+              </li>
+              <li>
+                <span class="font-bold">SubCategory: </span>
+                <span class="">{{
+                  product?.productId?.subcategoryId.name
+                }}</span>
+              </li>
+              <li>
+                <span class="font-bold">ID: </span>
+                <span class="">{{ product._id | slice : -4 }}</span>
+              </li>
+              <li>
+                <span class="bullet flex w-[30px] h-[30px] rounded-full"></span>
+              </li>
+            </ul>
+          </div>
+          <div class="h-[150px] flex flex-col row-span-2 col-start-4">
+            <span class="text-3xl text-gray-400 font-medium mb-5">
+              {{ product.price | currency : "USD" }}
+            </span>
+            <div class="text-3xl text-gray-400 font-medium pb-10">
+              {{ product.quantity }}
+            </div>
+            <button
+              (click)="removeProductFromCart(product._id)"
+              class="bg-red-500 rounded text-white font-medium text-xs p-2 w-fit hover:bg-red-600"
+            >
+              Remove From Cart
+            </button>
+          </div>
+        </div>
+
+        } }@else{
+        <p class="text-slate-700 font-medium">You don't have cart yet.</p>
+        }
+      </div>
+      <div class="flex flex-col gap-2">
+        <div
+          class="item h-fit border rounded-lg p-4 pb-12 flex flex-col gap-6 bg-white"
+        >
+          <h3 class="uppercase text-2xl text-center">order summary</h3>
+          <ul class="text-sm flex flex-col gap-4">
+            <li class="flex justify-between">
+              <span>Subtotal</span>
+              <span>{{ totalPrice | currency : "USD" }}</span>
+            </li>
+            <li class="flex justify-between">
+              <span>Tax Price</span>
+              <span>{{ taxPrice | currency : "USD" }}</span>
+            </li>
+
+            <li class="font-bold text-lg flex flex-col justify-between">
+              <div class="text-sm">
+                <span class="pr-3">Total: </span>
+                <span>{{ totalPrice + taxPrice | currency : "USD" }}</span>
+              </div>
+              @if(totalPriceAfterDiscount){
+              <div class="">
+                <span class="text-sm"
+                  >totalPriceAfterDiscount:
+                  {{ totalPriceAfterDiscount | currency : "USD" }}</span
+                >
+              </div>
+
+              }
+            </li>
+          </ul>
+
+          <button
+            (click)="toggleModal()"
+            class="border bg-black p-2 text-white font-medium uppercase shadow"
+          >
+            checkout now
+          </button>
+        </div>
+        <div class="border rounded-lg p-4 flex flex-col gap-6 bg-white">
+          <input
+            type="text"
+            placeholder="Add coupon"
+            class="border rounded p-2"
+            #coupon
+          />
+          <button
+            (click)="applyCouponCart(coupon.value)"
+            class="bg-yellow-500 text-white rounded px-3 py-1"
+          >
+            Update
+          </button>
+          @if(invalidCoupon){
+          <p class="text-red-600 font-medium text-xs">{{ invalidCoupon }}</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--  -->
+<div
+  [class]="
+    (open ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div
+    class="parmodal_modal bg-white w-[450px] h-[250px] pr-4 pl-10 pt-2 pb-8 rounded"
+  >
+    <div class="flex justify-end">
+      <button (click)="open = false" class="p-1 text-white bg-red-500 text-xs">
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">
+      Choose Address For Checkout
+    </h2>
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="createOneOrderByUser(addressForm)"
+      class="flex flex-col gap-6 pr-6"
+    >
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          Choose Your Address:</label
+        >
+        <select
+          formControlName="address"
+          class="border rounded text-sm text-gray-500 p-2"
+        >
+          <option hidden>choose address</option>
+          @for(address of addresses;track address._id){
+          <option [value]="{address}">
+            {{ address.street }} / {{ address.city }} / {{ address.state }} /
+            {{ address.postalCode }}
+          </option>
+
+          }
+        </select>
+      </div>
+
+      <button class="p-1 bg-yellow-500 text-white text-sm">Checkout</button>
+    </form>
+  </div>
+</div>
+
+<!-- modal -->
+<!-- <div
+  [class]="
+    (open ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div
+    class="parmodal_modal overflow-y-scroll bg-white w-[700px] h-[586px] pr-4 pl-10 pt-2 pb-8"
+  >
+    <div class="flex justify-end">
+      <button (click)="open = false" class="p-1 text-white bg-red-500 text-xs">
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">Upade Your Profile</h2>
+    <form class="flex flex-col gap-4 pr-6">
+      <div class="imgs flex gap-11">
+        <div class="">
+          <h3 class="text-gray-500 text-sm font-medium pb-2">cover picture</h3>
+          <div class="border w-[140px] h-[18vh] relative">
+            <img
+              src="https://images.pexels.com/photos/1079783/pexels-photo-1079783.jpeg?auto=compress&cs=tinysrgb&w=600"
+              alt=""
+              class="responsive-img"
+            />
+            <button
+              class="text-gray-200 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+            >
+              <label class="cursor-pointer" htmlFor="cover">
+              </label>
+              <input type="file" class="hidden" id="cover" />
+            </button>
+          </div>
+        </div>
+        <div class="">
+          <h3 class="text-gray-500 text-sm font-medium pb-2">
+            profile picture
+          </h3>
+          <div class="border w-[140px] h-[18vh] relative">
+            <img
+              src="https://images.pexels.com/photos/1079783/pexels-photo-1079783.jpeg?auto=compress&cs=tinysrgb&w=600"
+              alt=""
+              class="responsive-img"
+            />
+            <button
+              class="text-gray-200 absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+            >
+              <label class="cursor-pointer" htmlFor="profile">
+              </label>
+              <input type="file" class="hidden" id="profile" />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Email </label>
+        <input type="email" class="text-sm w-full border-0 border-b" required />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Password </label>
+        <input
+          type="password"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Name </label>
+        <input type="text" class="text-sm w-full border-0 border-b" required />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          Counrty / City
+        </label>
+        <input type="text" class="text-sm w-full border-0 border-b" required />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Website </label>
+        <input type="text" class="text-sm w-full border-0 border-b" required />
+      </div>
+      <button class="p-1 bg-blue-500 text-white text-sm">Update</button>
+    </form>
+  </div>
+</div> -->

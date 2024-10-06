@@ -1,0 +1,38 @@
+<section class="pb-10">
+  <div class="container-wrapper">
+    <h1 class="text-4xl font-bold mb-5 text-gray-500">Our Subcategories:</h1>
+    <h2 class="mb-2 font-bold text-gray-400">Choose a subcategory</h2>
+    <div class="flex gap-6 flex-wrap">
+      @if(subcategories.length > 0){ @for(subcategory of subcategories; track
+      subcategory._id){
+
+      <div class=" ">
+        <a
+          [routerLink]="'/subcategories/' + subcategory._id"
+          [queryParams]="{
+            subcategoryName: subcategory.name,
+            categoryId: subcategory.categoryId._id.toString()
+          }"
+          class="relative"
+        >
+          <img
+            src="https://github.com/safak/nextjs-tutorial/blob/main/public/apps.jpg?raw=true"
+            alt="applicationsImg"
+            width="{155}"
+            height="{100}"
+            class="h-56 grayscale"
+          />
+          <span
+            class="text-yellow-500 absolute bottom-1 right-2 font-bold text-xl"
+          >
+            {{ subcategory.name }}
+          </span>
+        </a>
+      </div>
+
+      } }@else{
+      <p class="text-slate-600 font-medium">No Subcategories Found</p>
+      }
+    </div>
+  </div>
+</section>

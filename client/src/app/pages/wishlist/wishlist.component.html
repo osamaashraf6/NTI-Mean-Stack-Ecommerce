@@ -1,0 +1,80 @@
+<!-- Start wishlist -->
+<section class="wishlist pb-[40px]" id="wishlist">
+  <div class="container-wrapper">
+    <div class="text-left pl-[132px] pb-[20px]">
+      <h2>My Wishlist <i class="fas fa-pencil-alt"></i></h2>
+    </div>
+    <div class="items grid place-items-center">
+      <table class="w-[80%] bg-white table-fixed">
+        <thead class="">
+          <tr class="border-y border-gray-200">
+            <th class="py-5"></th>
+            <th class="py-5"></th>
+            <th class="py-5">Product Name</th>
+            <th class="py-5">Unit Price</th>
+            <th class="py-5">Reviews Count</th>
+            <th class="py-5">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--  -->
+          @if(wishlists.length > 0){ @for(wishlist of wishlists; track
+          wishlist._id){
+          <tr class="border-b border-gray-200">
+            <td class="text-center">
+              <button (click)="removeProductFromWishlist(wishlist._id)">
+                &times;
+              </button>
+            </td>
+            <td class="pl-[45px]">
+              <div class="w-[80px] h-[80px]">
+                <img
+                [src]="productImg + wishlist.coverimg"
+                  alt=""
+                  class="img-responsive-fill"
+                />
+              </div>
+            </td>
+            <td class="capitalize text-center">{{ wishlist.name }}</td>
+            <td class="text-center">{{ wishlist.price }}</td>
+            <td class="text-center">(2) Review</td>
+            <td class="flex flex-col gap-2 justify-center items-center py-5">
+              <button
+                (click)="addProductToCart(wishlist._id)"
+                class="w-[80px] bg-black p-2 text-xs rounded text-white"
+              >
+                Add To Cart
+              </button>
+              <button
+                class="w-[80px] bg-yellow-400 p-2 text-xs rounded text-white"
+              >
+                See Details
+              </button>
+            </td>
+          </tr>
+
+          } }@else{
+          <p class="text-slate-700 font-medium w-[250px] p-3 flex">
+            You don't have wishlist yet
+          </p>
+          }
+
+          <!--  -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex gap-4 pt-10 justify-center items-center">
+      <span class="font-medium text-lg text-yellow-500 shadow-md p-1"
+        >Share on:
+      </span>
+      <div class="flex gap-4 items-center">
+        <i class="fab fa-facebook-f text-sm"></i>
+        <i class="fab fa-twitter text-sm"></i>
+        <i class="fab fa-linkedin-in text-sm"></i>
+        <i class="fab fa-pinterest-p text-sm"></i>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End wishlist -->
