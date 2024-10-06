@@ -31,7 +31,7 @@
 
 | Screenshot for the demo | Screenshot 2 |
 | --- | --- |
-| ![image](https://github.com/user-attachments/assets/244ced3a-338a-426b-8708-5023e8f2d294) | ![image](https://github.com/user-attachments/assets/71885620-1dc6-435f-9748-cd1181af7b59) |
+| ![image](https://github.com/user-attachments/assets/85b754c1-8353-4c50-adf3-217ad61cd44e) | ![image](https://github.com/user-attachments/assets/3e37163d-fe25-4fd9-a825-bfe377a45b08) |
 
 
 
