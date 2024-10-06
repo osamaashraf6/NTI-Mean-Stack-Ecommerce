@@ -1,0 +1,8 @@
+.bestseller-product:hover .related-product-icons {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bestseller-product:hover .bestseller-product-img {
+  transform: scale(1.2);
+}

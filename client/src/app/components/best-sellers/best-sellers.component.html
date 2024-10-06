@@ -1,0 +1,60 @@
+<section class="pb-[40px]">
+  <div class="container-wrapper">
+    <div class="flex items-center gap-5 pb-10">
+      <h2 class="text-slate-700 font-bold text-4xl uppercase w-[23%]">
+        best sellers
+      </h2>
+      <hr class="border-dashed border-slate-400 w-full" />
+    </div>
+    <div class="items flex flex-wrap gap-5">
+      @if(products.length > 0){ @for(product of products; track product._id){
+
+      <div class="bestseller-product w-[23%] rounded-md bg-white">
+        <div class="h-[40vh] relative overflow-hidden">
+          <img
+            [src]="productImg + product.coverimg"
+            [alt]="product.name"
+            class="img-responsive-fill bestseller-product-img transition duration-500 ease-in-out"
+          />
+          <div
+            class="related-product-icons opacity-5 invisible transition duration-500 ease-in-out flex gap-2 absolute bottom-[10%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <a
+              [routerLink]="'/products/' + product._id"
+              [queryParams]="{
+                subcategoryId: product.subcategoryId._id.toString()
+              }"
+              class="cursor-pointer w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+              ><i class="fas fa-search"></i></a
+            ><span
+              (click)="addProductToCart(product._id)"
+              class="cursor-pointer w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+              ><i class="fas fa-cart-plus"></i></span
+            ><span
+              (click)="addProductToWishlist(product._id)"
+              class="cursor-pointer w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+              ><i class="far fa-heart"></i
+            ></span>
+          </div>
+        </div>
+        <div class="p-4">
+          <div class="flex gap-3 flex-col justify-between items-center">
+            <h3 class="text-xl font-medium text-slate-600">
+              {{ product.name }}
+            </h3>
+            <span class="font-medium text-green-500 text-lg">{{
+              product.price
+            }}</span>
+            <div class="flex gap-2 items-center">
+              <i class="far fa-star text-yellow-400 text-xs"></i> (0) Reviews
+            </div>
+          </div>
+        </div>
+      </div>
+
+      } }@else{
+      <p class="font-medium text-slate-600">No Products available</p>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,136 @@
+<!-- Start section one -->
+<section class="pb-[40px]">
+  <div class="container-wrapper">
+    <div class="items flex gap-9 h-[593px]">
+      <div class="w-[40%] h-full overflow-hidden">
+        <!-- Start carousel -->
+        <p-carousel
+          [value]="product.imgs"
+          [numVisible]="1"
+          [numScroll]="1"
+          [circular]="true"
+          [autoplayInterval]="3000"
+          [showIndicators]="true"
+        >
+          <ng-template let-product pTemplate="item">
+            <div class="product-item h-full overflow-hidden">
+              <div class="h-full">
+                <img
+                  [src]="productImg + product"
+                  alt="Image of {{ product.name }}"
+                  class="img-responsive-fill"
+                />
+              </div>
+            </div>
+          </ng-template>
+        </p-carousel>
+
+        <!-- End carousel -->
+      </div>
+      <div class="w-[60%] border bg-white p-8 flex flex-col gap-5">
+        <h2 class="font-bold text-3xl text-slate-700 pt-2">
+          {{ product.name }}
+        </h2>
+        <div class="flex gap-2 items-center">
+          <div class="flex gap-1">
+            <i class="far fa-star text-yellow-400"></i
+            ><i class="far fa-star text-yellow-400"></i
+            ><i class="far fa-star text-yellow-400"></i
+            ><i class="far fa-star text-yellow-400"></i
+            ><i class="far fa-star text-yellow-400"></i>
+          </div>
+          <div class="text-slate-500">
+            ({{ product.reviews.length }} Reviews)
+          </div>
+        </div>
+        <span class="font-bold text-3xl text-slate-700">{{
+          product.price | currency : "USD"
+        }}</span>
+        <p class="text-slate-400">
+          {{ product.desc }}
+        </p>
+        <div class="flex gap-4 items-center">
+          <span class="font-medium text-lg text-slate-700">Sizes: </span>
+          <div class="flex gap-3 items-center">
+            <div class="flex gap-2">
+              <input type="radio" name="size" />
+              <label for="" class="text-slate-500">XS</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="size" />
+              <label for="" class="text-slate-500">S</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="size" />
+              <label for="" class="text-slate-500">M</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="size" />
+              <label for="" class="text-slate-500">L</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="size" />
+              <label for="" class="text-slate-500">XL</label>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-4 items-center">
+          <span class="font-medium text-lg text-slate-700">Colors: </span>
+          <div class="flex gap-3 items-center">
+            <div class="flex gap-2">
+              <input type="radio" name="color" />
+              <label for="" class="text-slate-500">Red</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="color" />
+              <label for="" class="text-slate-500">Orange</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="color" />
+              <label for="" class="text-slate-500">Blue</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="color" />
+              <label for="" class="text-slate-500">Blck</label>
+            </div>
+            <div class="flex gap-2">
+              <input type="radio" name="color" />
+              <label for="" class="text-slate-500">White</label>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-5 items-center pb-4">
+          <div class="flex items-center border gap-4">
+            <button
+              class="w-[35px] h-[38px] bg-gray-200 font-medium flex justify-center items-center"
+            >
+              -
+            </button>
+            <span>0</span>
+            <button
+              class="w-[35px] h-[38px] bg-gray-200 font-medium flex justify-center items-center"
+            >
+              +
+            </button>
+          </div>
+          <button
+            (click)="addProductToCart(product._id)"
+            class="bg-yellow-400 text-white p-2.5 text-sm"
+          >
+            Add To Cart
+          </button>
+        </div>
+        <div class="flex gap-4 items-center">
+          <span class="font-medium text-lg text-slate-700">Share on: </span>
+          <div class="flex gap-3 items-center">
+            <i class="fab fa-facebook-f text-sm"></i>
+            <i class="fab fa-twitter text-sm"></i>
+            <i class="fab fa-linkedin-in text-sm"></i>
+            <i class="fab fa-pinterest-p text-sm"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End section one -->

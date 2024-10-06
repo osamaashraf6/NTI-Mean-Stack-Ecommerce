@@ -1,0 +1,38 @@
+<section class="parent h-screen py-24 grid place-items-center">
+  <div class="wrapper w-[571px] rounded-lg">
+    <div class="bg-white p-4 border-r-2">
+      <h3 class="uppercase text-xl pb-4">Reset Code</h3>
+      <form
+        [formGroup]="verifyResetCodeForm"
+        (ngSubmit)="verifyResetCode(verifyResetCodeForm)"
+        class="flex flex-col gap-4 pb-4"
+      >
+        <div class="">
+          <input
+            formControlName="resetCode"
+            type="text"
+            class="p-2 border w-full"
+            placeholder="reset code"
+          />
+        </div>
+        @if(verifyResetCodeForm.get('resetCode')?.errors!==null&&verifyResetCodeForm.get('resetCode')?.touched){
+        <div class="text-red-600 mt-3">
+          @if(verifyResetCodeForm.get('resetCode')?.errors?.['required']){
+          <p>ResetCode Required</p>
+          }
+        </div>
+        } @if(invalidverifyResetCodeForm){
+        <span class="text-red-600">{{ invalidverifyResetCodeForm }}</span>
+        }
+
+        <button
+          class="uppercase bg-yellow-500 text-white p-2 px-10 text-sm w-fit"
+          type="submit"
+        >
+          <!-- <div class="spinner"></div> -->
+          <span>Submit</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

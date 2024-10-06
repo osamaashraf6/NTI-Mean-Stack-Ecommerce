@@ -1,0 +1,65 @@
+<!-- Start section one -->
+<section class="pb-[40px]">
+  <div class="container-wrapper">
+    <div class="flex items-center gap-1 pb-9">
+      <h2 class="font-bold text-2xl text-slate-700 w-[23%]">
+        RELATED PRODUCTS
+      </h2>
+      <hr class="w-full bg-gray-400 border-dashed" />
+    </div>
+    <div class="items flex gap-5">
+      @if(products.length > 0){ @for(product of products; track product._id){
+      <div class="related-product-icons-parent w-[25%] rounded-md bg-white">
+        <div class="h-[40vh] relative">
+          <img [src]="productImg + product.coverimg" alt="" class="img-responsive-fill" />
+          <div
+            class="related-product-icons opacity-5 invisible transition duration-500 ease flex gap-2 absolute bottom-[10%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <div (click)="reload()">
+              <a
+                [routerLink]="'/products/' + product._id"
+                [queryParams]="{
+                  subcategoryId: product.subcategoryId._id.toString()
+                }"
+                class="w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+                ><i class="fas fa-search"></i
+              ></a>
+            </div>
+            <button
+              (click)="addProductToCart(product._id)"
+              class="w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+            >
+              <i class="fas fa-cart-plus"></i></button
+            ><button
+              (click)="addProductToWishlist(product._id)"
+              class="w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-sm font-medium text-slate-400">
+              {{ product.name }}
+            </h3>
+            <span class="font-medium text-slate-800 text-lg">{{
+              product.price | currency : "USD"
+            }}</span>
+          </div>
+          <div class="flex">
+            <i class="far fa-star text-yellow-400 text-xs"></i
+            ><i class="far fa-star text-yellow-400 text-xs"></i
+            ><i class="far fa-star text-yellow-400 text-xs"></i
+            ><i class="far fa-star text-yellow-400 text-xs"></i
+            ><i class="far fa-star text-yellow-400 text-xs"></i>
+          </div>
+        </div>
+      </div>
+      } }@else{
+      <p class="text-slate-700 font-medium">No Related Products Available</p>
+      }
+    </div>
+  </div>
+</section>
+<!-- End section one -->

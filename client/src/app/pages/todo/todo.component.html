@@ -1,0 +1,7 @@
+<p>todo works!</p>
+<input type="text" [(ngModel)]="name" placeholder="todo" />
+<button (click)="createTodo(name)">Create Todo</button>
+@for( todo of todos; track todo.id) {
+<div class="d-flex"><p>{{ todo.name  }}</p>
+<button (click)="deleteTodo(todo.id)">delete</button></div>
+}

@@ -1,0 +1,104 @@
+<section class="py-3">
+  <div class="container-wrapper">
+    <div class="items pb-10 flex flex-wrap gap-5">
+      @if(products.length > 0){ @for(product of products; track product._id ){
+      <div
+        class="w-[30%] item bg-white shadow-md rounded-md p-3 border-2 border-yellow-400"
+      >
+        <div class="h-[35vh] shadow-md overflow-hidden relative">
+          <img
+            [src]="productImg + product.coverimg"
+            alt=""
+            class="img-responsive-fill hover:scale-125 hover:rotate-6 transition delay-150 ease-in-out"
+          />
+          <div class="flex flex-col gap-2 absolute top-[10%] right-0">
+            <a
+              [routerLink]="'/products/' + product._id"
+              class="shadow-md w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+              ><i class="fas fa-search"></i></a
+            ><button
+              (click)="addProductToCart(product._id)"
+              class="shadow-md w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+            >
+              <i class="fas fa-cart-plus"></i></button
+            ><button
+              (click)="addProductToWishlist(product._id)"
+              class="shadow-md w-[40px] h-[40px] bg-white rounded-full flex justify-center items-center"
+            >
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="py-4 flex justify-center items-center gap-2 flex-col">
+          <h2 class="text-slate-500 font-medium text-sm">
+            {{ product.name }}
+          </h2>
+          <span class="font-medium text-green-500 text-xl">{{
+            product.price | currency : "USD"
+          }}</span>
+
+          <div class="text-xs font-medium text-gray-400">
+            <i class="fas fa-star text-yellow-400"></i> (0) Reviews
+          </div>
+        </div>
+      </div>
+
+      } }@else{
+      <p class="text-slate-700 font-medium">No Products Available</p>
+      }
+    </div>
+    <!-- Start Pagination -->
+    <nav
+      aria-label="Page navigation example"
+      class="flex justify-center items-center py-20"
+    >
+      <ul class="inline-flex -space-x-px text-sm">
+        <li (click)="changePage(1)">
+          <button
+            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Previous
+          </button>
+        </li>
+        <!-- End previous -->
+
+        @if(pagination.prev){
+        <li
+          (click)="changePage(pagination.prev)"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <button class="page-link">{{ pagination.prev }}</button>
+        </li>
+        }
+        <li class="page-item">
+          <button
+            disabled
+            class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+          >
+            {{ pagination.currentPage }}
+          </button>
+        </li>
+        @if(pagination.next){
+        <li
+          (click)="changePage(pagination.next)"
+          class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <button class="page-link">{{ pagination.next }}</button>
+        </li>
+        }
+
+        <!-- Start next -->
+
+        <li (click)="changePage(pagination.totalPages!)">
+          <button
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- End Pagination -->
+  </div>
+</section>

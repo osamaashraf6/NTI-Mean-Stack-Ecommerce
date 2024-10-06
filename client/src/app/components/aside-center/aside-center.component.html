@@ -1,0 +1,387 @@
+<!-- coverimg -->
+<section class="cover_img mb-5">
+  <div class="h-[30vh]">
+    <img
+      src="https://images.pexels.com/photos/1079783/pexels-photo-1079783.jpeg?auto=compress&cs=tinysrgb&w=600"
+      alt="cover-img"
+      class="img-responsive-fill"
+    />
+  </div>
+</section>
+<!-- userinfo -->
+<section class="pb-24">
+  <div
+    class="px-6 pt-28 py-4 rounded-xl bg-white shadow-lg flex flex-col gap-5 relative mb-10"
+  >
+    <div
+      class="absolute top-[-100px] left-[50%] translate-x-[-50%] text-center"
+    >
+      <div
+        class="w-[160px] h-[160px] rounded-full border-[6px] border-white mb-3 shadow-md"
+      >
+        <img
+          [src]="
+            user.profileImg
+              ? userImg + user.profileImg
+              : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLNskLysx-bhYLWXuebdAbB4rjz9u8sNTkR4o4w484CkY8Fp0tdAfMbncOvg4I9eZMtpg&usqp=CAU'
+          "
+          alt="userprofile-img"
+          class="img-responsive-fill rounded-full"
+        />
+      </div>
+      <h2 class="capitalize font-bold text-lg">
+        {{ user.name }} {{ user.lastname }}
+      </h2>
+    </div>
+    <div class="flex justify-between items-center">
+      <div class="flex gap-4 items-center">
+        <i class="fab fa-facebook-f text-sm"></i>
+        <i class="fab fa-twitter text-sm"></i>
+        <i class="fab fa-linkedin-in text-sm"></i>
+        <i class="fab fa-pinterest-p text-sm"></i>
+      </div>
+      <div class="flex gap-4 text-gray-500">
+        <div class="flex gap-1 items-center">
+          <i class="fas fa-map-marker-alt"></i>
+          <!-- <span class=""
+            >{{ user.address[0].street }} | {{ user.address[0].street }} |
+            {{ user.address[0].street }} | {{ user.address[0].street }}</span
+          > -->
+        </div>
+      </div>
+      <div class="flex flex-col gap-4">
+        <button>
+          <i class="fas fa-envelope"></i>
+          {{ user.email }}
+        </button>
+        <div class="">+2 {{ user.phone }}</div>
+      </div>
+    </div>
+    <button
+      (click)="toggleUpdateUser()"
+      class="px-[18px] w-fit py-1 rounded bg-yellow-500 text-white text-sm"
+    >
+      Update My Profile
+    </button>
+    <button
+      (click)="toggleChangePassword()"
+      class="px-2 w-fit py-1 rounded bg-black text-white text-sm"
+    >
+      Change My Password
+    </button>
+    @if(user.passwordChangedAt){
+    <p class="text-yellow-500 font-medium">
+      Password Changed At: {{ user.passwordChangedAt | date }}
+    </p>
+    }
+  </div>
+  <!-- address -->
+  <div class="p-6 rounded-xl bg-white shadow-lg flex flex-col gap-4">
+    <h2 class="font-medium text-yellow-500 text-lg">My Addresses:</h2>
+    <div class="">
+      <ul class="text-slate-400 font-medium text-sm flex flex-col gap-3">
+        @if(addresses.length > 0){ @for(address of addresses; track
+        address._id){
+        <div class="flex justify-between border-y py-2">
+          <li>
+            <span class="text-yellow-600 text-[15px]">Street: </span>
+            {{ address.street }} /
+            <span class="text-yellow-600 text-[15px]">City: </span>
+            {{ address.city }} /
+            <span class="text-yellow-600 text-[15px]">State: </span>
+            {{ address.state }} /
+            <span class="text-yellow-600 text-[15px]">Postal Code: </span>
+            {{ address.postalCode }}
+          </li>
+          <div class="flex gap-2">
+            <button
+              (click)="toggleUpdateAddress(address._id)"
+              class="bg-yellow-500 px-2 py-1 rounded text-white text-sm"
+            >
+              Update
+            </button>
+            <button
+              (click)="removeAdress(address._id)"
+              class="bg-red-600 px-2 py-1 rounded text-white text-sm"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+        } }@else{
+        <p class="text-red-600 font-medium">No Address available for you</p>
+        }
+      </ul>
+    </div>
+    <div class="flex justify-between">
+      <button
+        (click)="toggleCreateAddress()"
+        class="px-2 py-1 rounded bg-black text-white text-sm w-[60px]"
+      >
+        Create
+      </button>
+      @if(invalidAddressForm){
+      <p class="text-red-600 font-medium">{{ invalidAddressForm }}</p>
+
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Modal User -->
+<div
+  [class]="
+    (openUpdateUser ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div
+    class="parmodal_modal overflow-y-scroll bg-white w-[700px] h-[586px] pr-4 pl-10 pt-2 pb-8"
+  >
+    <div class="flex justify-end">
+      <button
+        (click)="openUpdateUser = false"
+        class="p-1 text-white bg-red-500 text-xs"
+      >
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">Upade Your Profile</h2>
+    <form class="flex flex-col gap-4 pr-6">
+      <div class="imgs flex gap-11">
+        <div class="">
+          <h3 class="text-gray-500 text-sm font-medium pb-2">
+            profile picture
+          </h3>
+          <div class="border">
+            <label class="cursor-pointer" htmlFor="profile"> </label>
+            <input
+              (change)="getImage($event)"
+              type="file"
+              accept="image/*"
+              class=" "
+              id="profile"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Name </label>
+        <input
+          type="text"
+          (keyup)="name = username.value"
+          #username
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Phone </label>
+        <input
+          (keyup)="phone = tel.value"
+          #tel
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+
+      <button
+        (click)="updateUserProfileByHimSelf($event)"
+        class="p-1 bg-blue-500 text-white text-sm"
+      >
+        Update
+      </button>
+    </form>
+  </div>
+</div>
+<!-- change password -->
+<div
+  [class]="
+    (openChangePassword ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div class="parmodal_modal bg-white w-[350px] h-[350px] pr-4 pl-10 pt-2 pb-8">
+    <div class="flex justify-end">
+      <button
+        (click)="openChangePassword = false"
+        class="p-1 text-white bg-red-500 text-xs"
+      >
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">Upade Your Profile</h2>
+    <form
+      [formGroup]="passwordForm"
+      (ngSubmit)="changeUserPasswordByUserHimSelf(passwordForm)"
+      class="flex flex-col gap-4 pr-6"
+    >
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          Old Password
+        </label>
+        <input
+          formControlName="currentPassword"
+          type="password"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          New Password
+        </label>
+        <input
+          formControlName="password"
+          type="password"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          Confirm Password
+        </label>
+        <input
+          formControlName="confirmPassword"
+          type="password"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+
+      <button class="p-1 bg-yellow-500 text-white text-sm">Change</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal address create -->
+<div
+  [class]="
+    (openCreateAddress ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div class="parmodal_modal bg-white w-[350px] h-[430px] pr-4 pl-10 pt-2 pb-8">
+    <div class="flex justify-end">
+      <button
+        (click)="openCreateAddress = false"
+        class="p-1 text-white bg-red-500 text-xs"
+      >
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">Create Address</h2>
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="addAddress(addressForm)"
+      class="flex flex-col gap-4 pr-6"
+    >
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Street </label>
+        <input
+          formControlName="street"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> City </label>
+        <input
+          formControlName="city"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> State </label>
+        <input
+          formControlName="state"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          postalCode
+        </label>
+        <input
+          formControlName="postalCode"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+        />
+      </div>
+      @if(invalidAddressForm){
+      <p class="text-red-600 font-medium">{{ invalidAddressForm }}</p>
+      }
+      <button class="p-1 bg-yellow-500 text-white text-sm">Create</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal address update -->
+<div
+  [class]="
+    (openUpdateAddress ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div class="parmodal_modal bg-white w-[350px] h-[430px] pr-4 pl-10 pt-2 pb-8">
+    <div class="flex justify-end">
+      <button
+        (click)="openUpdateAddress = false"
+        class="p-1 text-white bg-red-500 text-xs"
+      >
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">Upade Your Address</h2>
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="updateAddress(addressIdQuery, addressForm)"
+      class="flex flex-col gap-4 pr-6"
+    >
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Street </label>
+        <input
+          formControlName="street"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> City </label>
+        <input
+          formControlName="city"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> State </label>
+        <input
+          formControlName="state"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium">
+          postalCode
+        </label>
+        <input
+          formControlName="postalCode"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+
+      <button class="p-1 bg-yellow-500 text-white text-sm">Update</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,174 @@
+<!-- Start wishlist -->
+<section class="wishlist pb-[40px]" id="wishlist">
+  <div class="container-wrapper">
+    <div class="text-left pl-[132px] pb-[20px]">
+      <h2>My Reviews <i class="fas fa-pencil-alt"></i></h2>
+    </div>
+    <div class="items grid place-items-center">
+      <table class="w-[80%] bg-white table-fixed">
+        <thead class="">
+          <tr class="border-y border-gray-200">
+            <th class="py-5">Review Id</th>
+            <th class="py-5">Product Name</th>
+            <th class="py-5">Reviews Comment</th>
+            <th class="py-5">Reviews Rate</th>
+            <th class="py-5">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!--  -->
+          @if(userReviews.length > 0){ @for(review of userReviews; track
+          review._id){
+          <tr class="border-b border-gray-200">
+            <td class="capitalize text-center">
+              #{{ review._id | slice : -4 }}
+            </td>
+            <td class="text-center">
+              <a class="underline" [routerLink]="'/products/' + review.productId._id">{{
+                review.productId.name
+              }}</a>
+            </td>
+            <td class="text-center">{{ review.comment }}</td>
+            <td class="text-center">
+              @for(star of getStarsArray(review.rate); track star){
+              <i class="far fa-star text-yellow-400"></i>
+              } ({{ review.rate }})
+            </td>
+            <td class="flex flex-col gap-2 justify-center items-center py-5">
+              <button  (click)="toggleUpdateAddress(review._id)" class="bg-black p-2 text-xs rounded text-white">
+                Update Review
+              </button>
+              <button  (click)="deleteOneReviewByUser(review._id)" class="bg-yellow-400 p-2 px-3 text-xs rounded text-white">
+                Delete Review
+              </button>
+            </td>
+          </tr>
+          } }@else{
+          <p class="text-slate-700 font-medium p-4">No Reviews Available</p>
+          }
+          <!--  -->
+          <!--  -->
+          <!-- Start Pagination -->
+          <nav
+            aria-label="Page navigation example"
+            class="flex justify-center items-center py-20"
+          >
+            <ul class="inline-flex -space-x-px text-sm">
+              <li (click)="changePage(1)">
+                <button
+                  class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Previous
+                </button>
+              </li>
+              <!-- End previous -->
+
+              @if(pagination.prev){
+              <li
+                (click)="changePage(pagination.prev)"
+                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <button class="page-link">{{ pagination.prev }}</button>
+              </li>
+              }
+              <li class="page-item">
+                <button
+                  disabled
+                  class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                >
+                  {{ pagination.currentPage }}
+                </button>
+              </li>
+              @if(pagination.next){
+              <li
+                (click)="changePage(pagination.next)"
+                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <button class="page-link">{{ pagination.next }}</button>
+              </li>
+              }
+
+              <!-- Start next -->
+
+              <li (click)="changePage(pagination.totalPages!)">
+                <button
+                  class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- End Pagination -->
+          <!--  -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex gap-4 pt-10 justify-center items-center">
+      <span class="font-medium text-lg text-yellow-500 shadow-md p-1"
+        >Share on:
+      </span>
+      <div class="flex gap-4 items-center">
+        <i class="fab fa-facebook-f text-sm"></i>
+        <i class="fab fa-twitter text-sm"></i>
+        <i class="fab fa-linkedin-in text-sm"></i>
+        <i class="fab fa-pinterest-p text-sm"></i>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End wishlist -->
+<!-- Modal review update -->
+<div
+  [class]="
+    (openUpdateAddress ? 'flex' : 'hidden') +
+    ' parmodal top-0 left-0 w-full h-full justify-center pt-[82px] bg-[#000000cc] z-50 fixed'
+  "
+>
+  <div class="parmodal_modal bg-white w-[350px] h-[430px] pr-4 pl-10 pt-2 pb-8">
+    <div class="flex justify-end">
+      <button
+        (click)="openUpdateAddress = false"
+        class="p-1 text-white bg-red-500 text-xs"
+      >
+        close
+      </button>
+    </div>
+    <h2 class="text-2xl text-gray-300 font-bold pb-6">
+      Upade Your Product Review
+    </h2>
+    <form
+      [formGroup]="reviewForm"
+      (ngSubmit)="updateOneReviewByUser(reviewId!, reviewForm)"
+      class="flex flex-col gap-4 pr-6"
+    >
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Rate </label>
+        <input
+          formControlName="rate"
+          type="number"
+          class="text-sm w-full border-0 border-b"
+          min="0"
+          max="5"
+          required
+        />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-gray-400 pb-4 text-xs font-medium"> Comment </label>
+        <input
+          formControlName="comment"
+          type="text"
+          class="text-sm w-full border-0 border-b"
+          required
+        />
+      </div>
+
+      <button class="p-1 bg-yellow-500 text-white text-sm">Update</button>
+      @if(reviewUpadtedToastMessage){
+      <p class="text-red-600 font-medium">{{ reviewUpadtedToastMessage }}</p>
+      }
+    </form>
+  </div>
+</div>

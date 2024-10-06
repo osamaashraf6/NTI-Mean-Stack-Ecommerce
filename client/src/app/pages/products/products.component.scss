@@ -1,0 +1,10 @@
+.aside_left::-webkit-scrollbar {
+  width: 4px;
+}
+.aside_left::-webkit-scrollbar-track {
+  background-color: #c3c2c2;
+}
+.aside_left::-webkit-scrollbar-thumb {
+  background-color: rgb(228, 201, 25);
+  border-radius: 10px;
+}
