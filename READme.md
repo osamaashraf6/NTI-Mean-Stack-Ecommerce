@@ -25,7 +25,7 @@
 
 # 📖 [E-commerce App] <a name="about-project"></a>
 
-- The E-commerce App is a robust and scalable online shopping platform developed using the MERN stack. It provides users with a seamless shopping experience, enabling them to browse products, add items to their cart, and complete transactions with ease👌 
+- The E-commerce App is a robust and scalable online shopping platform developed using the MEAN stack. It provides users with a seamless shopping experience, enabling them to browse products, add items to their cart, and complete transactions with ease👌 
 
 
 
